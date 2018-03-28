@@ -1,23 +1,60 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
+<div class="jumbotron" ng-controller="insertCtrl">
+  <h3 class="font-weight-bold">Ajouter une nouvelle personne</h3>
   <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
+    <img src="images/personIcon.png" ><br>
+   </p>
+   <form>
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Prenom: </span>
+    <input type="text" class="form-control" placeholder="Prenom" aria-describedby="basic-addon1" ng-model="name" required>
+    <span class="input-group-addon" id="basic-addon1">Nom: </span>
+    <input type="text" class="form-control" placeholder="Nom" aria-describedby="basic-addon1" ng-model="lastName" required>
+  </div> 
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Email: </span>
+    <input type="email" class="form-control" placeholder="email" aria-describedby="basic-addon1" ng-model="email" required>
+  </div> 
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">Âge: </span>
+    <input type="number" min="0" max="99" class="form-control" placeholder="Âge" aria-describedby="basic-addon1" ng-model="age" required>
+  </div> 
+  </br>
+  </br>
+  <div class="alert alert-success alert-dismissible ng-hide" role="alert" ng-hide="!isVisible" >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="isVisible = false"><span aria-hidden="true">&times;</span></button>
+    <strong>Felicitations!</strong> Personne ajouté dans la base de données.
+  </div>
+  <button class="btn  btn-success btn-sm" ng-click="insertData()">Ajouter</button>
+</form>
 </div>
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+<div ng-controller="MainCtrl">
+  <div>
+    <h3 class="display-4 text-center">Liste des personnes dans la basse de données: </h3>
+  </br>
+  </br>
+    <table  class="table table-hover table-dark">
+      <thead>
+        <tr >
+          <th scope="col">#</th>
+          <th scope="col">Prenom: </th>
+          <th scope="col">Nom: </th>
+          <th scope="col">Email: </th>
+          <th scope="col">Âge: </th>
+        </tr>
+      </thead>
+      <tbody >
+        <tr ng-repeat="person in people">
+          <th scope="row"> {{$index + 1}}</th>
+          <td>{{person.name}}</td>
+          <td>{{person.lastName}}</td>
+          <td>{{person.email}}</td>
+          <td>{{person.age}}</td>
+          
+        </tr>
+       
+      </tbody>
+    </table>
+  </div>
+ 
 </div>
