@@ -8,8 +8,8 @@
  * Controller of the tp7SirApp
  */
 var mainModule = angular.module('tp7SirApp');
-mainModule.controller('MainCtrl',['$scope','getPeople',showPeople]);
-mainModule.controller('insertCtrl',['$scope','insertPeople',insertPerson]);
+mainModule.controller('MainCtrl',['$scope','getPeople','$rootScope',showPeople]);
+mainModule.controller('insertCtrl',['$scope','insertPeople','$rootScope',insertPerson]);
 mainModule.constant('baseUrl','/rest/opowerws/');
 mainModule.factory('insertPeople', ['$resource', 'baseUrl', function($resource, baseUrl) {
         return $resource(baseUrl + "createperson",{},{
@@ -42,35 +42,53 @@ function exception(logger) {
         };
     }
   }
-  function insertPerson($scope,insertPeople){
+  function insertPerson($scope,insertPeople,$rootScope){
     var personObjet = { "name":"", "lastName":"", "email":"","age":0 };
   
-    $scope.insertData= function(){
-      personObjet.name = $scope.name;
-      personObjet.lastName = $scope.lastName;
-      personObjet.email = $scope.email;
-      personObjet.age = $scope.age;
-      personObjet = JSON.stringify(personObjet);
-
-      $scope.name ="";
-      $scope.lastName = "";
-      $scope.email = "";
-      $scope.age = "";
+    $scope.insertData= function(isValid){
+      if(isValid){
+        console.log("Entro");
+        personObjet.name = $scope.name;
+        personObjet.lastName = $scope.lastName;
+        personObjet.email = $scope.email;
+        personObjet.age = $scope.age;
+        personObjet = JSON.stringify(personObjet);
+        
+        $scope.name ="";
+        $scope.lastName = "";
+        $scope.email = "";
+        $scope.age = "";
       
-      insertPeople.save(personObjet).$promise.then(function (result) {
-        $scope.s = result.objectToSave;
-      });
-    }
+        insertPeople.save(personObjet).$promise.then(function (result) {
+          $scope.s = result.objectToSave;
+          $scope.submitted = true;
+          $rootScope.$emit("CallParentMethod", {});
+        });
+       
+        }
+      }
+     
   
   }
-  function showPeople ($scope,getPeople) {
+  function showPeople ($scope,getPeople, $rootScope) {
+ 
+   $scope.getData = function(){
+     
+         getPeople.get().$promise.then(function (result) {
+       
+        $scope.people= result.objectToSave;
+       });
+      }
+    $scope.getData();
+   
+      $rootScope.$on("CallParentMethod", function(){
+         $scope.getData();
+      });
+  }
+
+
     
-    getPeople.get().$promise.then(function (result) {
-      
-      $scope.people = result.objectToSave;
-      console.log(result.objectToSave);
-    });
-
-  };
-
+ 
+  
+    
 
